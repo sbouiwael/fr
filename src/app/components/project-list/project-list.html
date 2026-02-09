@@ -1,0 +1,60 @@
+<div style="margin: 16px 0;">
+  <a routerLink="/projects/new">+ New Project</a>
+</div>
+
+@if (loading) {
+  <p>Loading...</p>
+}
+
+@if (errorMessage) {
+  <p style="color: red;">{{ errorMessage }}</p>
+}
+
+@if (!loading && projects.length > 0) {
+  <h2>List of Projects</h2>
+
+  <ul>
+    @for (project of projects; track project.id) {
+      <li>
+        <b>{{ project.name }}</b>
+
+        @if (project.active === false) {
+          <span style="color: red; margin-left: 8px;">(inactive)</span>
+        }
+
+        @if (project.description) {
+          <div>{{ project.description }}</div>
+        }
+
+        <div style="font-size: 12px; margin-top: 4px;">
+          @if (project.startDate) {
+            <span><b>Start:</b> {{ project.startDate }}</span>
+          }
+          @if (project.endDate) {
+            <span style="margin-left: 10px;">
+              <b>End:</b> {{ project.endDate }}
+            </span>
+          }
+        </div>
+
+        <div style="font-size: 12px; margin-top: 4px;">
+          <b>Project Manager ID:</b>
+          {{ project.projectManagerId ?? '—' }}
+        </div>
+
+        <div style="margin-top: 8px;">
+          <button
+            (click)="deactivate(project.id)"
+            [disabled]="project.active === false"
+          >
+            Deactivate
+          </button>
+        </div>
+
+        <hr />
+      </li>
+    }
+  </ul>
+} @else if (!loading && !errorMessage) {
+  <p>No projects available.</p>
+}

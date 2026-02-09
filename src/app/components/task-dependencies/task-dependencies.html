@@ -1,0 +1,69 @@
+<h2>Task Dependencies (Task #{{ taskId }})</h2>
+
+<div style="margin: 12px 0;">
+  <a routerLink="/tasks/{{ taskId }}">← Back to Task details</a>
+</div>
+
+@if (errorMessage) {
+  <p style="color: red;">{{ errorMessage }}</p>
+}
+
+<h3>Add dependency</h3>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div>
+    <label>Other Task ID *</label>
+    <input type="number" formControlName="otherTaskId" />
+  </div>
+
+  <div>
+    <label>Direction *</label>
+    <select formControlName="direction">
+      <option value="PREDECESSOR">Other task blocks this task</option>
+      <option value="SUCCESSOR">This task blocks other task</option>
+    </select>
+  </div>
+
+  <div>
+    <label>Type *</label>
+    <select formControlName="type">
+      <option value="FS">FS</option>
+      <option value="SS">SS</option>
+      <option value="FF">FF</option>
+      <option value="SF">SF</option>
+    </select>
+  </div>
+
+  <button type="submit" [disabled]="loading">
+    {{ loading ? 'Saving...' : 'Create dependency' }}
+  </button>
+</form>
+
+<hr />
+
+@if (predecessors.length > 0) {
+  <h3>Predecessors (what blocks this task)</h3>
+  <ul>
+    @for (d of predecessors; track d.id) {
+      <li>
+        Task {{ d.predecessorTaskId }} → Task {{ d.successorTaskId }} ({{ d.type }})
+        <button style="margin-left: 10px;" (click)="remove(d)">Delete</button>
+      </li>
+    }
+  </ul>
+} @else {
+  <p>No predecessors.</p>
+}
+
+@if (successors.length > 0) {
+  <h3>Successors (what this task blocks)</h3>
+  <ul>
+    @for (d of successors; track d.id) {
+      <li>
+        Task {{ d.predecessorTaskId }} → Task {{ d.successorTaskId }} ({{ d.type }})
+        <button style="margin-left: 10px;" (click)="remove(d)">Delete</button>
+      </li>
+    }
+  </ul>
+} @else {
+  <p>No successors.</p>
+}

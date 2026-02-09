@@ -1,0 +1,87 @@
+<h2>Create Task</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <!-- Task Name -->
+  <div>
+    <label>Task Name *</label>
+    <input type="text" formControlName="name" />
+    <div *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+      Task Name is required.
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div>
+    <label>Description</label>
+    <textarea formControlName="description"></textarea>
+    <div *ngIf="form.get('description')?.touched && form.get('description')?.invalid">
+      Description must be at least 5 characters.
+    </div>
+  </div>
+
+  <!-- Duration (Days) -->
+  <div>
+    <label>Duration (in Days) *</label>
+    <input type="number" formControlName="durationDays" />
+    <div *ngIf="form.get('durationDays')?.touched && form.get('durationDays')?.invalid">
+      Duration is required and must be a positive number.
+    </div>
+  </div>
+
+  <!-- Start Date -->
+  <div>
+    <label>Start Date *</label>
+    <input type="date" formControlName="startDate" />
+    <div *ngIf="form.get('startDate')?.touched && form.get('startDate')?.invalid">
+      Start Date is required.
+    </div>
+  </div>
+
+  <!-- End Date -->
+  <div>
+    <label>End Date *</label>
+    <input type="date" formControlName="endDate" />
+    <div *ngIf="form.get('endDate')?.touched && form.get('endDate')?.invalid">
+      End Date is required.
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div>
+    <label>Status</label>
+    <select formControlName="status">
+      <option value="NOT_STARTED">Not Started</option>
+      <option value="IN_PROGRESS">In Progress</option>
+      <option value="DONE">Done</option>
+      <option value="BLOCKED">Blocked</option>
+    </select>
+  </div>
+
+  <!-- Progress -->
+  <div>
+    <label>Progress (%) *</label>
+    <input type="number" formControlName="progress" />
+    <div *ngIf="form.get('progress')?.touched && form.get('progress')?.invalid">
+      Progress is required and must be between 0 and 100.
+    </div>
+  </div>
+
+  <!-- Project -->
+<div>
+  <label>Project *</label>
+  <input type="number" formControlName="projectId" />
+  <div *ngIf="form.get('projectId')?.touched && form.get('projectId')?.invalid">
+    Project is required.
+  </div>
+</div>
+
+
+  <!-- Submit -->
+  <button type="submit" [disabled]="loading">
+    {{ loading ? 'Saving...' : 'Create Task' }}
+  </button>
+
+  <a routerLink="/tasks" style="margin-left: 12px;">Cancel</a>
+
+  <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+</form>

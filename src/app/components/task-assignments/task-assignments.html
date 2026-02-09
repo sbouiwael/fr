@@ -1,0 +1,54 @@
+<h2>Task Assignments (Task #{{ taskId }})</h2>
+
+<div style="margin: 12px 0;">
+  <a [routerLink]="['/tasks', taskId]">← Back to Task details</a>
+</div>
+
+@if (errorMessage) {
+  <p style="color: red;">{{ errorMessage }}</p>
+}
+
+<h3>Assign a user</h3>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div>
+    <label>User ID *</label>
+    <input type="number" formControlName="userId" />
+  </div>
+
+  <div>
+    <label>Assigned hours *</label>
+    <input type="number" formControlName="assignedHours" />
+  </div>
+
+  <button type="submit" [disabled]="loading">
+    {{ loading ? 'Saving...' : 'Assign' }}
+  </button>
+</form>
+
+<hr />
+
+@if (assignments.length > 0) {
+  <h3>Assignments</h3>
+  <ul>
+    @for (a of assignments; track a.id) {
+      <li>
+        <b>User:</b> {{ a.userId }} —
+        <b>Hours:</b>
+        <input
+          type="number"
+          [value]="a.assignedHours"
+          (change)="updateHours(a, $any($event.target).value)"
+          style="width: 90px;"
+        />
+
+        @if (a.active === false) {
+          <span style="color: red; margin-left: 10px;">(inactive)</span>
+        }
+
+        <button style="margin-left: 10px;" (click)="deactivate(a)">Deactivate</button>
+      </li>
+    }
+  </ul>
+} @else {
+  <p>No assignments for this task.</p>
+}

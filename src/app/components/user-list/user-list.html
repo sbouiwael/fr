@@ -1,0 +1,47 @@
+<div style="margin: 16px 0;">
+  <a routerLink="/users/new">+ New User</a>
+</div>
+
+@if (loading) {
+  <p>Loading...</p>
+}
+
+@if (errorMessage) {
+  <p style="color: red;">{{ errorMessage }}</p>
+}
+
+@if (!loading && users.length > 0) {
+  <h2>List of users</h2>
+
+  <ul>
+    @for (user of users; track user.id) {
+      <li style="padding: 8px 0;">
+        <b>{{ user.firstName }} {{ user.lastName }}</b>
+
+        @if (user.active === false) {
+          <span style="color: red; margin-left: 8px;">(inactive)</span>
+        }
+
+        <div style="font-size: 12px; margin-top: 4px;">
+          <div><b>Email:</b> {{ user.email }}</div>
+          <div><b>Role:</b> {{ user.role }}</div>
+          <div><b>Weekly capacity:</b> {{ user.weeklyCapacity }}h</div>
+
+          @if (user.createdAt) {
+            <div><b>Created:</b> {{ user.createdAt }}</div>
+          }
+        </div>
+
+        <div style="margin-top: 8px;">
+          <button (click)="deactivate(user.id)" [disabled]="user.active === false">
+            Deactivate
+          </button>
+        </div>
+
+        <hr />
+      </li>
+    }
+  </ul>
+} @else if (!loading && !errorMessage) {
+  <p>No users available.</p>
+}

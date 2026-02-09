@@ -1,0 +1,48 @@
+<!-- task-list.html -->
+<div style="margin-bottom: 20px;">
+  <a routerLink="/tasks/create" class="btn btn-primary">+ New Task</a>
+</div>
+
+@if (tasks.length > 0) {
+  <h2>List of Tasks</h2>
+
+  <ul>
+    @for (task of tasks; track task.id) {
+      <li>
+        <b>
+  <a [routerLink]="['/tasks', task.id]">{{ task.name }}</a>
+</b>
+
+
+        @if (!task.active) {
+          <span style="color: red;">(inactive)</span>
+        }
+
+        @if (task.description) {
+          <div>{{ task.description }}</div>
+        }
+
+        <div style="font-size: 12px;">
+          @if (task.status) {
+            <span>Status: {{ task.status }}</span>
+          }
+          @if (task.progress !== null && task.progress !== undefined) {
+            <span style="margin-left: 10px;">Progress: {{ task.progress }}%</span>
+          }
+        </div>
+
+        @if (task.startDate) {
+          <div style="font-size: 12px;">Start: {{ task.startDate | date:'shortDate' }}</div>
+        }
+
+        @if (task.endDate) {
+          <div style="font-size: 12px;">End: {{ task.endDate | date:'shortDate' }}</div>
+        }
+
+        <hr />
+      </li>
+    }
+  </ul>
+} @else {
+  <p>No tasks available.</p>
+}

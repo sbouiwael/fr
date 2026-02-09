@@ -1,0 +1,77 @@
+<!-- src/app/components/task-details/task-details.html -->
+<h2>Task Details</h2>
+
+<div style="margin: 12px 0;">
+  <a routerLink="/tasks">← Back to tasks</a>
+</div>
+
+@if (vm$ | async; as vm) {
+
+  @if (vm.loading) {
+    <p>Loading...</p>
+  }
+
+  @if (vm.errorMessage) {
+    <p style="color: red;">{{ vm.errorMessage }}</p>
+  }
+
+  @if (!vm.loading && vm.task) {
+    <div style="border: 1px solid #ddd; padding: 12px; border-radius: 6px;">
+      <h3 style="margin: 0 0 8px 0;">{{ vm.task.name }}</h3>
+
+      @if (!vm.task.active) {
+        <span style="color: red;">(inactive)</span>
+      }
+
+      @if (vm.task.description) {
+        <p style="margin: 8px 0;">{{ vm.task.description }}</p>
+      }
+
+      <div style="font-size: 13px;">
+        <div><b>Status:</b> {{ vm.task.status }}</div>
+        <div><b>Progress:</b> {{ vm.task.progress }}%</div>
+        <div><b>Duration:</b> {{ vm.task.durationDays }} day(s)</div>
+
+        <!-- Si ton backend renvoie project:{id:...} -->
+        @if (vm.task.projectId) {
+          <div><b>Project ID:</b> {{ vm.task.projectId }}</div>
+
+        }
+
+        @if (vm.task.startDate) {
+          <div><b>Start:</b> {{ vm.task.startDate | date:'shortDate' }}</div>
+        }
+
+        @if (vm.task.endDate) {
+          <div><b>End:</b> {{ vm.task.endDate | date:'shortDate' }}</div>
+        }
+        @if (vm.task.workloadHours != null) {
+  <div><b>Workload:</b> {{ vm.task.workloadHours }}h</div>
+}
+@if (vm.task.parentTaskId) {
+  <div><b>Parent Task ID:</b> {{ vm.task.parentTaskId }}</div>
+}
+
+      </div>
+    </div>
+
+    <hr />
+
+    <h3>Task management</h3>
+    <ul>
+      <li>
+        <a [routerLink]="['/tasks', vm.taskId, 'assignments']">
+          Assignments (resources)
+        </a>
+      </li>
+      <li>
+        <a [routerLink]="['/tasks', vm.taskId, 'dependencies']">
+          Dependencies (links)
+        </a>
+      </li>
+    </ul>
+
+  } @else if (!vm.loading && !vm.errorMessage) {
+    <p>Task not found.</p>
+  }
+}
