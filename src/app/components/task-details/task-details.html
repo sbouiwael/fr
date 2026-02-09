@@ -1,77 +1,130 @@
-<!-- src/app/components/task-details/task-details.html -->
-<h2>Task Details</h2>
+<div class="container-sm">
+  @if (vm$ | async; as vm) {
 
-<div style="margin: 12px 0;">
-  <a routerLink="/tasks">← Back to tasks</a>
-</div>
-
-@if (vm$ | async; as vm) {
-
-  @if (vm.loading) {
-    <p>Loading...</p>
-  }
-
-  @if (vm.errorMessage) {
-    <p style="color: red;">{{ vm.errorMessage }}</p>
-  }
-
-  @if (!vm.loading && vm.task) {
-    <div style="border: 1px solid #ddd; padding: 12px; border-radius: 6px;">
-      <h3 style="margin: 0 0 8px 0;">{{ vm.task.name }}</h3>
-
-      @if (!vm.task.active) {
-        <span style="color: red;">(inactive)</span>
-      }
-
-      @if (vm.task.description) {
-        <p style="margin: 8px 0;">{{ vm.task.description }}</p>
-      }
-
-      <div style="font-size: 13px;">
-        <div><b>Status:</b> {{ vm.task.status }}</div>
-        <div><b>Progress:</b> {{ vm.task.progress }}%</div>
-        <div><b>Duration:</b> {{ vm.task.durationDays }} day(s)</div>
-
-        <!-- Si ton backend renvoie project:{id:...} -->
-        @if (vm.task.projectId) {
-          <div><b>Project ID:</b> {{ vm.task.projectId }}</div>
-
-        }
-
-        @if (vm.task.startDate) {
-          <div><b>Start:</b> {{ vm.task.startDate | date:'shortDate' }}</div>
-        }
-
-        @if (vm.task.endDate) {
-          <div><b>End:</b> {{ vm.task.endDate | date:'shortDate' }}</div>
-        }
-        @if (vm.task.workloadHours != null) {
-  <div><b>Workload:</b> {{ vm.task.workloadHours }}h</div>
-}
-@if (vm.task.parentTaskId) {
-  <div><b>Parent Task ID:</b> {{ vm.task.parentTaskId }}</div>
-}
-
-      </div>
+    <div class="page-header">
+      <h1 class="page-title">Task Details</h1>
+      <a routerLink="/tasks" class="btn btn-outline">← Back to Tasks</a>
     </div>
 
-    <hr />
+    @if (vm.loading) {
+      <div class="loading">Loading task details...</div>
+    }
 
-    <h3>Task management</h3>
-    <ul>
-      <li>
-        <a [routerLink]="['/tasks', vm.taskId, 'assignments']">
-          Assignments (resources)
-        </a>
-      </li>
-      <li>
-        <a [routerLink]="['/tasks', vm.taskId, 'dependencies']">
-          Dependencies (links)
-        </a>
-      </li>
-    </ul>
+    @if (vm.errorMessage) {
+      <div class="alert alert-error">{{ vm.errorMessage }}</div>
+    }
 
-  } @else if (!vm.loading && !vm.errorMessage) {
-    <p>Task not found.</p>
+    @if (!vm.loading && vm.task) {
+      <div class="card">
+        <div class="card-header">
+          <div class="flex justify-between items-center">
+            <h2 class="card-title">{{ vm.task.name }}</h2>
+            @if (!vm.task.active) {
+              <span class="badge badge-error">Inactive</span>
+            } @else if (vm.task.status === 'DONE') {
+              <span class="badge badge-success">Done</span>
+            } @else if (vm.task.status === 'IN_PROGRESS') {
+              <span class="badge badge-info">In Progress</span>
+            } @else if (vm.task.status === 'BLOCKED') {
+              <span class="badge badge-warning">Blocked</span>
+            } @else {
+              <span class="badge badge-primary">Not Started</span>
+            }
+          </div>
+        </div>
+
+        <div class="card-body">
+          @if (vm.task.description) {
+            <p class="text-muted">{{ vm.task.description }}</p>
+          }
+
+          @if (vm.task.progress !== null && vm.task.progress !== undefined) {
+            <div class="progress-container">
+              <div class="progress-label">
+                <span>Task Progress</span>
+                <span class="progress-value">{{ vm.task.progress }}%</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" [style.width.%]="vm.task.progress"></div>
+              </div>
+            </div>
+          }
+
+          <div class="task-details-grid">
+            <div class="detail-item">
+              <span class="detail-label">Duration</span>
+              <span class="detail-value">{{ vm.task.durationDays }} day(s)</span>
+            </div>
+
+            @if (vm.task.projectId) {
+              <div class="detail-item">
+                <span class="detail-label">Project ID</span>
+                <span class="detail-value">{{ vm.task.projectId }}</span>
+              </div>
+            }
+
+            @if (vm.task.startDate) {
+              <div class="detail-item">
+                <span class="detail-label">Start Date</span>
+                <span class="detail-value">{{ vm.task.startDate | date:'mediumDate' }}</span>
+              </div>
+            }
+
+            @if (vm.task.endDate) {
+              <div class="detail-item">
+                <span class="detail-label">End Date</span>
+                <span class="detail-value">{{ vm.task.endDate | date:'mediumDate' }}</span>
+              </div>
+            }
+
+            @if (vm.task.workloadHours != null) {
+              <div class="detail-item">
+                <span class="detail-label">Workload</span>
+                <span class="detail-value">{{ vm.task.workloadHours }}h</span>
+              </div>
+            }
+
+            @if (vm.task.parentTaskId) {
+              <div class="detail-item">
+                <span class="detail-label">Parent Task ID</span>
+                <span class="detail-value">{{ vm.task.parentTaskId }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="management-section">
+        <h3 class="section-title">Task Management</h3>
+        <div class="grid grid-cols-2">
+          <a [routerLink]="['/tasks', vm.taskId, 'assignments']" class="management-card">
+            <svg class="management-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <div>
+              <h4>Assignments</h4>
+              <p>Manage task resources</p>
+            </div>
+          </a>
+
+          <a [routerLink]="['/tasks', vm.taskId, 'dependencies']" class="management-card">
+            <svg class="management-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            <div>
+              <h4>Dependencies</h4>
+              <p>Manage task links</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    } @else if (!vm.loading && !vm.errorMessage) {
+      <div class="card text-center">
+        <p class="text-muted">Task not found.</p>
+        <a routerLink="/tasks" class="btn btn-primary mt-md">Back to Tasks</a>
+      </div>
+    }
   }
-}
+</div>
+

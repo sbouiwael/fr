@@ -1,48 +1,76 @@
-<!-- task-list.html -->
-<div style="margin-bottom: 20px;">
-  <a routerLink="/tasks/create" class="btn btn-primary">+ New Task</a>
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">Tasks</h1>
+    <a routerLink="/tasks/create" class="btn btn-primary">
+      <span>+</span> New Task
+    </a>
+  </div>
+
+  @if (tasks.length > 0) {
+    <div class="grid">
+      @for (task of tasks; track task.id) {
+        <div class="card task-card">
+          <div class="card-header">
+            <div class="flex justify-between items-center">
+              <h3 class="card-title">
+                <a [routerLink]="['/tasks', task.id]">{{ task.name }}</a>
+              </h3>
+              @if (!task.active) {
+                <span class="badge badge-error">Inactive</span>
+              } @else if (task.status === 'DONE') {
+                <span class="badge badge-success">Done</span>
+              } @else if (task.status === 'IN_PROGRESS') {
+                <span class="badge badge-info">In Progress</span>
+              } @else if (task.status === 'BLOCKED') {
+                <span class="badge badge-warning">Blocked</span>
+              } @else {
+                <span class="badge badge-primary">Not Started</span>
+              }
+            </div>
+          </div>
+
+          <div class="card-body">
+            @if (task.description) {
+              <p class="text-muted">{{ task.description }}</p>
+            }
+
+            <div class="task-meta">
+              @if (task.progress !== null && task.progress !== undefined) {
+                <div class="progress-container">
+                  <div class="progress-label">
+                    <span>Progress</span>
+                    <span class="progress-value">{{ task.progress }}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" [style.width.%]="task.progress"></div>
+                  </div>
+                </div>
+              }
+
+              <div class="task-dates">
+                @if (task.startDate) {
+                  <div class="meta-item">
+                    <span class="meta-label">Start:</span>
+                    <span class="meta-value">{{ task.startDate | date:'shortDate' }}</span>
+                  </div>
+                }
+                @if (task.endDate) {
+                  <div class="meta-item">
+                    <span class="meta-label">End:</span>
+                    <span class="meta-value">{{ task.endDate | date:'shortDate' }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="card text-center">
+      <p class="text-muted">No tasks available. Create your first task to get started!</p>
+      <a routerLink="/tasks/create" class="btn btn-primary mt-md">Create Task</a>
+    </div>
+  }
 </div>
 
-@if (tasks.length > 0) {
-  <h2>List of Tasks</h2>
-
-  <ul>
-    @for (task of tasks; track task.id) {
-      <li>
-        <b>
-  <a [routerLink]="['/tasks', task.id]">{{ task.name }}</a>
-</b>
-
-
-        @if (!task.active) {
-          <span style="color: red;">(inactive)</span>
-        }
-
-        @if (task.description) {
-          <div>{{ task.description }}</div>
-        }
-
-        <div style="font-size: 12px;">
-          @if (task.status) {
-            <span>Status: {{ task.status }}</span>
-          }
-          @if (task.progress !== null && task.progress !== undefined) {
-            <span style="margin-left: 10px;">Progress: {{ task.progress }}%</span>
-          }
-        </div>
-
-        @if (task.startDate) {
-          <div style="font-size: 12px;">Start: {{ task.startDate | date:'shortDate' }}</div>
-        }
-
-        @if (task.endDate) {
-          <div style="font-size: 12px;">End: {{ task.endDate | date:'shortDate' }}</div>
-        }
-
-        <hr />
-      </li>
-    }
-  </ul>
-} @else {
-  <p>No tasks available.</p>
-}

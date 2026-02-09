@@ -1,0 +1,126 @@
+.assignments-section {
+  margin-top: var(--space-2xl);
+}
+
+.section-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.assignments-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.assignment-card {
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  transition: all var(--transition-base);
+}
+
+.assignment-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-md);
+}
+
+.assignment-info {
+  display: grid;
+  grid-template-columns: 1fr 200px 120px;
+  gap: var(--space-lg);
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.assignment-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.assignment-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--color-accent);
+  background-color: rgba(66, 183, 212, 0.1);
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+}
+
+.assignment-user > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.user-label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.user-value {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.assignment-hours {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.assignment-hours label {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.hours-input {
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--color-primary);
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.hours-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(66, 183, 212, 0.1);
+}
+
+.assignment-status {
+  display: flex;
+  justify-content: center;
+}
+
+.assignment-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}
+
+@media (max-width: 768px) {
+  .assignment-info {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+  }
+}

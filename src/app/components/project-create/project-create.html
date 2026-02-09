@@ -1,63 +1,71 @@
-<h2>Create Project</h2>
-
-<form [formGroup]="form" (ngSubmit)="submit()">
-
-  <div>
-    <label>Name *</label>
-    <input type="text" formControlName="name" />
-    @if (form.get('name')?.touched && form.get('name')?.invalid) {
-      <div style="color:red;">Name is required (min 2 chars).</div>
-    }
+<div class="container-sm">
+  <div class="page-header">
+    <h1 class="page-title">Create Project</h1>
   </div>
 
-  <div>
-    <label>Description</label>
-    <textarea formControlName="description"></textarea>
-  </div>
+  <div class="card">
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label>Project Name *</label>
+        <input type="text" formControlName="name" placeholder="Enter project name" />
+        @if (form.get('name')?.touched && form.get('name')?.invalid) {
+          <div class="form-error">Name is required (minimum 2 characters).</div>
+        }
+      </div>
 
-  <div>
-    <label>Start Date *</label>
-    <input type="date" formControlName="startDate" />
-    @if (form.get('startDate')?.touched && form.get('startDate')?.invalid) {
-      <div style="color:red;">Start date is required.</div>
-    }
-  </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea formControlName="description" placeholder="Describe your project..."></textarea>
+      </div>
 
-  <div>
-    <label>End Date</label>
-    <input type="date" formControlName="endDate" />
-  </div>
+      <div class="grid grid-cols-2">
+        <div class="form-group">
+          <label>Start Date *</label>
+          <input type="date" formControlName="startDate" />
+          @if (form.get('startDate')?.touched && form.get('startDate')?.invalid) {
+            <div class="form-error">Start date is required.</div>
+          }
+        </div>
 
-  <div>
-    <label>Project Manager *</label>
-    <select formControlName="projectManagerId">
-      <option [ngValue]="null">-- select --</option>
-      @for (u of users; track u.id) {
-        <option [ngValue]="u.id">
-          {{ u.firstName }} {{ u.lastName }} ({{ u.role }})
-        </option>
+        <div class="form-group">
+          <label>End Date</label>
+          <input type="date" formControlName="endDate" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Project Manager *</label>
+        <select formControlName="projectManagerId">
+          <option [ngValue]="null">-- Select Project Manager --</option>
+          @for (u of users; track u.id) {
+            <option [ngValue]="u.id">
+              {{ u.firstName }} {{ u.lastName }} ({{ u.role }})
+            </option>
+          }
+        </select>
+
+        @if (form.get('projectManagerId')?.touched && form.get('projectManagerId')?.invalid) {
+          <div class="form-error">Project Manager is required.</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="active" />
+          Active Project
+        </label>
+      </div>
+
+      @if (errorMsg) {
+        <div class="alert alert-error">{{ errorMsg }}</div>
       }
-    </select>
 
-    @if (form.get('projectManagerId')?.touched && form.get('projectManagerId')?.invalid) {
-      <div style="color:red;">Project Manager is required.</div>
-    }
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          {{ loading ? 'Creating...' : 'Create Project' }}
+        </button>
+        <a routerLink="/projects" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
   </div>
-
-  <div style="margin-top: 8px;">
-    <label>
-      <input type="checkbox" formControlName="active" />
-      Active
-    </label>
-  </div>
-
-  <button type="submit" [disabled]="loading">
-    {{ loading ? 'Saving...' : 'Create' }}
-  </button>
-
-  <a routerLink="/projects" style="margin-left: 12px;">Cancel</a>
-
-  @if (errorMsg) {
-    <p style="color:red; margin-top: 12px;">{{ errorMsg }}</p>
-  }
-</form>
+</div>

@@ -1,60 +1,74 @@
-<div style="margin: 16px 0;">
-  <a routerLink="/projects/new">+ New Project</a>
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">Projects</h1>
+    <a routerLink="/projects/new" class="btn btn-primary">
+      <span>+</span> New Project
+    </a>
+  </div>
+
+  @if (loading) {
+    <div class="loading">Loading projects...</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert alert-error">{{ errorMessage }}</div>
+  }
+
+  @if (!loading && projects.length > 0) {
+    <div class="grid">
+      @for (project of projects; track project.id) {
+        <div class="card">
+          <div class="card-header">
+            <div class="flex justify-between items-center">
+              <h3 class="card-title">{{ project.name }}</h3>
+              @if (project.active === false) {
+                <span class="badge badge-error">Inactive</span>
+              } @else {
+                <span class="badge badge-success">Active</span>
+              }
+            </div>
+          </div>
+
+          <div class="card-body">
+            @if (project.description) {
+              <p class="text-muted">{{ project.description }}</p>
+            }
+
+            <div class="project-meta">
+              <div class="meta-item">
+                <span class="meta-label">Start Date:</span>
+                <span class="meta-value">{{ project.startDate || '—' }}</span>
+              </div>
+              @if (project.endDate) {
+                <div class="meta-item">
+                  <span class="meta-label">End Date:</span>
+                  <span class="meta-value">{{ project.endDate }}</span>
+                </div>
+              }
+              <div class="meta-item">
+                <span class="meta-label">Project Manager ID:</span>
+                <span class="meta-value">{{ project.projectManagerId ?? '—' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deactivate(project.id)"
+              [disabled]="project.active === false"
+            >
+              Deactivate
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (!loading && !errorMessage) {
+    <div class="card text-center">
+      <p class="text-muted">No projects available. Create your first project to get started!</p>
+      <a routerLink="/projects/new" class="btn btn-primary mt-md">Create Project</a>
+    </div>
+  }
 </div>
 
-@if (loading) {
-  <p>Loading...</p>
-}
-
-@if (errorMessage) {
-  <p style="color: red;">{{ errorMessage }}</p>
-}
-
-@if (!loading && projects.length > 0) {
-  <h2>List of Projects</h2>
-
-  <ul>
-    @for (project of projects; track project.id) {
-      <li>
-        <b>{{ project.name }}</b>
-
-        @if (project.active === false) {
-          <span style="color: red; margin-left: 8px;">(inactive)</span>
-        }
-
-        @if (project.description) {
-          <div>{{ project.description }}</div>
-        }
-
-        <div style="font-size: 12px; margin-top: 4px;">
-          @if (project.startDate) {
-            <span><b>Start:</b> {{ project.startDate }}</span>
-          }
-          @if (project.endDate) {
-            <span style="margin-left: 10px;">
-              <b>End:</b> {{ project.endDate }}
-            </span>
-          }
-        </div>
-
-        <div style="font-size: 12px; margin-top: 4px;">
-          <b>Project Manager ID:</b>
-          {{ project.projectManagerId ?? '—' }}
-        </div>
-
-        <div style="margin-top: 8px;">
-          <button
-            (click)="deactivate(project.id)"
-            [disabled]="project.active === false"
-          >
-            Deactivate
-          </button>
-        </div>
-
-        <hr />
-      </li>
-    }
-  </ul>
-} @else if (!loading && !errorMessage) {
-  <p>No projects available.</p>
-}

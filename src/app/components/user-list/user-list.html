@@ -1,47 +1,97 @@
-<div style="margin: 16px 0;">
-  <a routerLink="/users/new">+ New User</a>
+<div class="container">
+  <div class="page-header">
+    <h1 class="page-title">Users</h1>
+    <a routerLink="/users/new" class="btn btn-primary">
+      <span>+</span> New User
+    </a>
+  </div>
+
+  @if (loading) {
+    <div class="loading">Loading users...</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert alert-error">{{ errorMessage }}</div>
+  }
+
+  @if (!loading && users.length > 0) {
+    <div class="grid grid-cols-2">
+      @for (user of users; track user.id) {
+        <div class="card user-card">
+          <div class="card-header">
+            <div class="flex justify-between items-center">
+              <h3 class="card-title">{{ user.firstName }} {{ user.lastName }}</h3>
+              @if (user.active === false) {
+                <span class="badge badge-error">Inactive</span>
+              } @else {
+                <span class="badge badge-success">Active</span>
+              }
+            </div>
+          </div>
+
+          <div class="card-body">
+            <div class="user-info">
+              <div class="info-item">
+                <svg class="info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <div>
+                  <span class="info-label">Email</span>
+                  <span class="info-value">{{ user.email }}</span>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <svg class="info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <div>
+                  <span class="info-label">Role</span>
+                  <span class="info-value">{{ user.role }}</span>
+                </div>
+              </div>
+
+              <div class="info-item">
+                <svg class="info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div>
+                  <span class="info-label">Weekly Capacity</span>
+                  <span class="info-value">{{ user.weeklyCapacity }}h</span>
+                </div>
+              </div>
+
+              @if (user.createdAt) {
+                <div class="info-item">
+                  <svg class="info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <div>
+                    <span class="info-label">Created</span>
+                    <span class="info-value">{{ user.createdAt }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="card-footer">
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deactivate(user.id)"
+              [disabled]="user.active === false"
+            >
+              Deactivate
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (!loading && !errorMessage) {
+    <div class="card text-center">
+      <p class="text-muted">No users available. Create your first user to get started!</p>
+      <a routerLink="/users/new" class="btn btn-primary mt-md">Create User</a>
+    </div>
+  }
 </div>
 
-@if (loading) {
-  <p>Loading...</p>
-}
-
-@if (errorMessage) {
-  <p style="color: red;">{{ errorMessage }}</p>
-}
-
-@if (!loading && users.length > 0) {
-  <h2>List of users</h2>
-
-  <ul>
-    @for (user of users; track user.id) {
-      <li style="padding: 8px 0;">
-        <b>{{ user.firstName }} {{ user.lastName }}</b>
-
-        @if (user.active === false) {
-          <span style="color: red; margin-left: 8px;">(inactive)</span>
-        }
-
-        <div style="font-size: 12px; margin-top: 4px;">
-          <div><b>Email:</b> {{ user.email }}</div>
-          <div><b>Role:</b> {{ user.role }}</div>
-          <div><b>Weekly capacity:</b> {{ user.weeklyCapacity }}h</div>
-
-          @if (user.createdAt) {
-            <div><b>Created:</b> {{ user.createdAt }}</div>
-          }
-        </div>
-
-        <div style="margin-top: 8px;">
-          <button (click)="deactivate(user.id)" [disabled]="user.active === false">
-            Deactivate
-          </button>
-        </div>
-
-        <hr />
-      </li>
-    }
-  </ul>
-} @else if (!loading && !errorMessage) {
-  <p>No users available.</p>
-}

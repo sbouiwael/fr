@@ -1,54 +1,93 @@
-<h2>Task Assignments (Task #{{ taskId }})</h2>
+<div class="container-sm">
+  <div class="page-header">
+    <h1 class="page-title">Task Assignments</h1>
+    <a [routerLink]="['/tasks', taskId]" class="btn btn-outline">← Back to Task</a>
+  </div>
 
-<div style="margin: 12px 0;">
-  <a [routerLink]="['/tasks', taskId]">← Back to Task details</a>
+  @if (errorMessage) {
+    <div class="alert alert-error">{{ errorMessage }}</div>
+  }
+
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Assign User to Task</h3>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="grid grid-cols-2">
+        <div class="form-group">
+          <label>User ID *</label>
+          <input type="number" formControlName="userId" placeholder="Enter user ID" />
+        </div>
+
+        <div class="form-group">
+          <label>Assigned Hours *</label>
+          <input type="number" formControlName="assignedHours" placeholder="0" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="loading">
+          {{ loading ? 'Assigning...' : 'Assign User' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="assignments-section">
+    <h3 class="section-title">Current Assignments</h3>
+
+    @if (assignments.length > 0) {
+      <div class="assignments-list">
+        @for (a of assignments; track a.id) {
+          <div class="assignment-card">
+            <div class="assignment-info">
+              <div class="assignment-user">
+                <svg class="assignment-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <div>
+                  <span class="user-label">User ID</span>
+                  <span class="user-value">{{ a.userId }}</span>
+                </div>
+              </div>
+
+              <div class="assignment-hours">
+                <label>Assigned Hours</label>
+                <input
+                  type="number"
+                  [value]="a.assignedHours"
+                  (change)="updateHours(a, $any($event.target).value)"
+                  class="hours-input"
+                />
+              </div>
+
+              <div class="assignment-status">
+                @if (a.active === false) {
+                  <span class="badge badge-error">Inactive</span>
+                } @else {
+                  <span class="badge badge-success">Active</span>
+                }
+              </div>
+            </div>
+
+            <div class="assignment-actions">
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="deactivate(a)"
+                [disabled]="a.active === false"
+              >
+                Deactivate
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="card text-center">
+        <p class="text-muted">No assignments for this task yet. Assign a user to get started!</p>
+      </div>
+    }
+  </div>
 </div>
 
-@if (errorMessage) {
-  <p style="color: red;">{{ errorMessage }}</p>
-}
-
-<h3>Assign a user</h3>
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <div>
-    <label>User ID *</label>
-    <input type="number" formControlName="userId" />
-  </div>
-
-  <div>
-    <label>Assigned hours *</label>
-    <input type="number" formControlName="assignedHours" />
-  </div>
-
-  <button type="submit" [disabled]="loading">
-    {{ loading ? 'Saving...' : 'Assign' }}
-  </button>
-</form>
-
-<hr />
-
-@if (assignments.length > 0) {
-  <h3>Assignments</h3>
-  <ul>
-    @for (a of assignments; track a.id) {
-      <li>
-        <b>User:</b> {{ a.userId }} —
-        <b>Hours:</b>
-        <input
-          type="number"
-          [value]="a.assignedHours"
-          (change)="updateHours(a, $any($event.target).value)"
-          style="width: 90px;"
-        />
-
-        @if (a.active === false) {
-          <span style="color: red; margin-left: 10px;">(inactive)</span>
-        }
-
-        <button style="margin-left: 10px;" (click)="deactivate(a)">Deactivate</button>
-      </li>
-    }
-  </ul>
-} @else {
-  <p>No assignments for this task.</p>
-}
