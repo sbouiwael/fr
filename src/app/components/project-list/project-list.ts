@@ -37,16 +37,13 @@ export class ProjectList implements OnInit {
         this.projects = Array.isArray(data) ? data : [];
         this.loading = false;
         this.cdr.detectChanges();
-        console.log('Projects from API:', this.projects);
       },
       error: (err: HttpErrorResponse) => {
         this.loading = false;
         this.projects = [];
         this.errorMessage =
           `HTTP ${err.status} - ${err.statusText} : ` +
-          (typeof err.error === 'string'
-            ? err.error
-            : JSON.stringify(err.error));
+          (typeof err.error === 'string' ? err.error : JSON.stringify(err.error));
         console.error('Error fetching projects:', err);
         this.cdr.detectChanges();
       },

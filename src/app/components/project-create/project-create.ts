@@ -34,6 +34,16 @@ export class ProjectCreate implements OnInit {
       endDate: [''],
       projectManagerId: [null, [Validators.required, Validators.min(1)]],
       active: [true],
+
+      // optional (future proof)
+      portfolioName: [''],
+      programName: [''],
+      subProgramName: [''],
+      objective: [''],
+      calendarName: [''],
+      baselineStartDate: [''],
+      baselineEndDate: [''],
+      progress: [0, [Validators.min(0), Validators.max(100)]],
     });
   }
 
@@ -61,10 +71,20 @@ export class ProjectCreate implements OnInit {
     const payload: CreateProjectRequest = {
       name: String(v.name).trim(),
       description: v.description ? String(v.description).trim() : null,
-      startDate: v.startDate,                 // "YYYY-MM-DD"
-      endDate: v.endDate ? v.endDate : null,  // nullable
+      startDate: v.startDate,
+      endDate: v.endDate ? v.endDate : null,
       projectManagerId: Number(v.projectManagerId),
       active: !!v.active,
+
+      // optional
+      portfolioName: v.portfolioName ? String(v.portfolioName).trim() : null,
+      programName: v.programName ? String(v.programName).trim() : null,
+      subProgramName: v.subProgramName ? String(v.subProgramName).trim() : null,
+      objective: v.objective ? String(v.objective).trim() : null,
+      calendarName: v.calendarName ? String(v.calendarName).trim() : null,
+      baselineStartDate: v.baselineStartDate ? v.baselineStartDate : null,
+      baselineEndDate: v.baselineEndDate ? v.baselineEndDate : null,
+      progress: v.progress !== null && v.progress !== undefined ? Number(v.progress) : null,
     };
 
     this.projectService.createProject(payload).subscribe({

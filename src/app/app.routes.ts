@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { ProjectList } from './components/project-list/project-list';
 import { ProjectCreate } from './components/project-create/project-create';
+import { ProjectDetails } from './components/project-details/project-details';
 
 import { UserListComponent } from './components/user-list/user-list';
 import { UserCreate } from './components/user-create/user-create';
@@ -16,6 +17,8 @@ import { TaskDependencies } from './components/task-dependencies/task-dependenci
 export const routes: Routes = [
   { path: 'projects', component: ProjectList },
   { path: 'projects/new', component: ProjectCreate },
+  { path: 'projects/:id', component: ProjectDetails }, // ✅ NEW
+
 
   { path: 'users', component: UserListComponent },
   { path: 'users/new', component: UserCreate },

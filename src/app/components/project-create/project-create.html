@@ -5,11 +5,15 @@
 
   <div class="card">
     <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <!-- BASIC INFO -->
       <div class="form-group">
         <label>Project Name *</label>
         <input type="text" formControlName="name" placeholder="Enter project name" />
         @if (form.get('name')?.touched && form.get('name')?.invalid) {
-          <div class="form-error">Name is required (minimum 2 characters).</div>
+          <div class="form-error">
+            Name is required (minimum 2 characters).
+          </div>
         }
       </div>
 
@@ -18,13 +22,11 @@
         <textarea formControlName="description" placeholder="Describe your project..."></textarea>
       </div>
 
+      <!-- DATES -->
       <div class="grid grid-cols-2">
         <div class="form-group">
           <label>Start Date *</label>
           <input type="date" formControlName="startDate" />
-          @if (form.get('startDate')?.touched && form.get('startDate')?.invalid) {
-            <div class="form-error">Start date is required.</div>
-          }
         </div>
 
         <div class="form-group">
@@ -33,6 +35,7 @@
         </div>
       </div>
 
+      <!-- PROJECT MANAGER -->
       <div class="form-group">
         <label>Project Manager *</label>
         <select formControlName="projectManagerId">
@@ -43,10 +46,6 @@
             </option>
           }
         </select>
-
-        @if (form.get('projectManagerId')?.touched && form.get('projectManagerId')?.invalid) {
-          <div class="form-error">Project Manager is required.</div>
-        }
       </div>
 
       <div class="form-group">
@@ -56,16 +55,78 @@
         </label>
       </div>
 
+      <!-- OPTIONAL SECTION -->
+      <div class="divider"></div>
+      <h3 style="margin-top:16px;">Optional Information</h3>
+
+      <!-- Portfolio / Program -->
+      <div class="grid grid-cols-2">
+        <div class="form-group">
+          <label>Portfolio Name</label>
+          <input type="text" formControlName="portfolioName" placeholder="Optional" />
+        </div>
+
+        <div class="form-group">
+          <label>Program Name</label>
+          <input type="text" formControlName="programName" placeholder="Optional" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Sub Program Name</label>
+        <input type="text" formControlName="subProgramName" placeholder="Optional" />
+      </div>
+
+      <!-- Objective -->
+      <div class="form-group">
+        <label>Objective</label>
+        <textarea formControlName="objective" placeholder="Project objective..."></textarea>
+      </div>
+
+      <!-- Calendar -->
+      <div class="form-group">
+        <label>Calendar Name</label>
+        <input type="text" formControlName="calendarName" placeholder="ex: Standard 5j/week" />
+      </div>
+
+      <!-- Baseline Dates -->
+      <div class="grid grid-cols-2">
+        <div class="form-group">
+          <label>Baseline Start Date</label>
+          <input type="date" formControlName="baselineStartDate" />
+        </div>
+
+        <div class="form-group">
+          <label>Baseline End Date</label>
+          <input type="date" formControlName="baselineEndDate" />
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="form-group">
+        <label>Progress (%)</label>
+        <input
+          type="number"
+          formControlName="progress"
+          min="0"
+          max="100"
+          placeholder="0-100"
+        />
+      </div>
+
+      <!-- ERROR -->
       @if (errorMsg) {
         <div class="alert alert-error">{{ errorMsg }}</div>
       }
 
+      <!-- ACTIONS -->
       <div class="form-actions">
         <button type="submit" class="btn btn-primary" [disabled]="loading">
           {{ loading ? 'Creating...' : 'Create Project' }}
         </button>
         <a routerLink="/projects" class="btn btn-outline">Cancel</a>
       </div>
+
     </form>
   </div>
 </div>

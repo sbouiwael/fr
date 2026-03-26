@@ -6,7 +6,27 @@
     </a>
   </div>
 
-  @if (tasks.length > 0) {
+  <div class="card" style="margin-bottom: 12px;">
+    <div class="grid grid-cols-2">
+      <div class="form-group">
+        <label>Project ID *</label>
+        <input type="number" [(ngModel)]="projectId" placeholder="ex: 1" />
+      </div>
+      <div class="form-actions" style="align-items: end;">
+        <button class="btn btn-primary" (click)="loadTasks()">Load Tasks</button>
+      </div>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="loading">Loading tasks...</div>
+  }
+
+  @if (errorMessage) {
+    <div class="alert alert-error">{{ errorMessage }}</div>
+  }
+
+  @if (!loading && tasks.length > 0) {
     <div class="grid">
       @for (task of tasks; track task.id) {
         <div class="card task-card">
@@ -61,16 +81,21 @@
                   </div>
                 }
               </div>
+
+              @if (task.workHours != null) {
+                <div class="meta-item">
+                  <span class="meta-label">Planned Work:</span>
+                  <span class="meta-value">{{ task.workHours }}h</span>
+                </div>
+              }
             </div>
           </div>
         </div>
       }
     </div>
-  } @else {
+  } @else if (!loading && !errorMessage) {
     <div class="card text-center">
-      <p class="text-muted">No tasks available. Create your first task to get started!</p>
-      <a routerLink="/tasks/create" class="btn btn-primary mt-md">Create Task</a>
+      <p class="text-muted">No tasks loaded. Enter a Project ID and click “Load Tasks”.</p>
     </div>
   }
 </div>
-

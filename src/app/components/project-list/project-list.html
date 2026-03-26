@@ -20,8 +20,9 @@
         <div class="card">
           <div class="card-header">
             <div class="flex justify-between items-center">
-              <h3 class="card-title">{{ project.name }}</h3>
-              @if (project.active === false) {
+<h3 class="card-title">
+  <a [routerLink]="['/projects', project.id]">{{ project.name }}</a>
+</h3>              @if (project.active === false) {
                 <span class="badge badge-error">Inactive</span>
               } @else {
                 <span class="badge badge-success">Active</span>

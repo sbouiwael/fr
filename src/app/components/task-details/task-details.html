@@ -77,12 +77,12 @@
               </div>
             }
 
-            @if (vm.task.workloadHours != null) {
-              <div class="detail-item">
-                <span class="detail-label">Workload</span>
-                <span class="detail-value">{{ vm.task.workloadHours }}h</span>
-              </div>
-            }
+           @if (vm.task.workHours != null) {
+  <div class="detail-item">
+    <span class="detail-label">Planned Work</span>
+    <span class="detail-value">{{ vm.task.workHours }}h</span>
+  </div>
+}
 
             @if (vm.task.parentTaskId) {
               <div class="detail-item">

@@ -1,0 +1,123 @@
+<div class="container-sm">
+  @if (vm$ | async; as vm) {
+
+    <div class="page-header">
+      <h1 class="page-title">Project Details</h1>
+      <a routerLink="/projects" class="btn btn-outline">← Back to Projects</a>
+    </div>
+
+    @if (vm.loading) {
+      <div class="loading">Loading project details...</div>
+    }
+
+    @if (vm.errorMessage) {
+      <div class="alert alert-error">{{ vm.errorMessage }}</div>
+    }
+
+    @if (!vm.loading && vm.project) {
+      <div class="card">
+        <div class="card-header">
+          <div class="flex justify-between items-center">
+            <h2 class="card-title">{{ vm.project.name }}</h2>
+            @if (!vm.project.active) {
+              <span class="badge badge-error">Inactive</span>
+            } @else {
+              <span class="badge badge-success">Active</span>
+            }
+          </div>
+        </div>
+
+        <div class="card-body">
+          @if (vm.project.description) {
+            <p class="text-muted">{{ vm.project.description }}</p>
+          }
+
+          <div class="grid grid-cols-2">
+            <div class="detail-item">
+              <span class="detail-label">Project ID</span>
+              <span class="detail-value">{{ vm.project.id }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Project Manager ID</span>
+<span class="detail-value">{{ vm.project.projectManagerId }}</span>            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Start Date</span>
+              <span class="detail-value">{{ vm.project.startDate | date:'mediumDate' }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">End Date</span>
+              <span class="detail-value">
+                @if (vm.project.endDate) { {{ vm.project.endDate | date:'mediumDate' }} } @else { — }
+              </span>
+            </div>
+          </div>
+
+          <div class="divider" style="margin:16px 0;"></div>
+          <h3 class="section-title">Optional Information</h3>
+
+          <div class="grid grid-cols-2">
+            <div class="detail-item">
+              <span class="detail-label">Portfolio</span>
+              <span class="detail-value">{{ vm.project.portfolioName ?? '—' }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Program</span>
+              <span class="detail-value">{{ vm.project.programName ?? '—' }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Sub Program</span>
+              <span class="detail-value">{{ vm.project.subProgramName ?? '—' }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Calendar</span>
+              <span class="detail-value">{{ vm.project.calendarName ?? '—' }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Baseline Start</span>
+              <span class="detail-value">
+                @if (vm.project.baselineStartDate) { {{ vm.project.baselineStartDate | date:'mediumDate' }} } @else { — }
+              </span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Baseline End</span>
+              <span class="detail-value">
+                @if (vm.project.baselineEndDate) { {{ vm.project.baselineEndDate | date:'mediumDate' }} } @else { — }
+              </span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Progress</span>
+              <span class="detail-value">
+                @if (vm.project.progress != null) { {{ vm.project.progress }}% } @else { — }
+              </span>
+            </div>
+          </div>
+
+          @if (vm.project.objective) {
+            <div class="divider" style="margin:16px 0;"></div>
+            <h3 class="section-title">Objective</h3>
+            <p class="text-muted">{{ vm.project.objective }}</p>
+          }
+        </div>
+
+        <div class="card-footer">
+          <a routerLink="/tasks" class="btn btn-outline">Go to Tasks</a>
+        </div>
+      </div>
+
+    } @else if (!vm.loading && !vm.errorMessage) {
+      <div class="card text-center">
+        <p class="text-muted">Project not found.</p>
+        <a routerLink="/projects" class="btn btn-primary mt-md">Back to Projects</a>
+      </div>
+    }
+  }
+</div>
