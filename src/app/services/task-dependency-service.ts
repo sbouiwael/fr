@@ -25,4 +25,8 @@ export class TaskDependencyService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  getByProject(projectId: number): Observable<TaskDependencyDTO[]> {
+    return this.http.get<TaskDependencyDTO[]>(`${this.baseUrl}/project/${projectId}`);
+  }
 }

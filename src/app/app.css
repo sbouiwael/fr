@@ -54,6 +54,12 @@
   color: var(--color-secondary);
 }
 
+.nav-logo-img {
+  height: 44px;
+  width: auto;
+  border-radius: var(--radius-sm);
+}
+
 .nav-links {
   display: flex;
   gap: var(--space-sm);

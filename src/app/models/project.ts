@@ -21,4 +21,6 @@ export interface ProjectDTO {
   baselineEndDate?: string | null;
 
   progress?: number | null;
+
+  portefeuilleId?: number | null;
 }
